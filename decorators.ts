@@ -1,19 +1,30 @@
 class Boat {
-    @testDecorator
     color: string = 'red';
 
-    // @testDecorator
     get formattedColor(): string {
         return `This boats color is ${this.color}`;
     }
 
-    // @testDecorator
+    @logError
     pilot(): void {
+        throw new Error();
+
         console.log('swish');
     }
 }
 
-function testDecorator(target: any, key: string): void {
+function logError(target: any, key: string, desc: PropertyDescriptor): void {
     console.log('Target:', target);
     console.log('Key:', key);
 }
+
+const myObject = {};
+
+Object.defineProperty(myObject, 'test', {
+    value: 'test',
+    writable: false,
+    enumerable: false,
+    configurable: false,
+});
+
+delete myObject.test;
