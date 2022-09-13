@@ -1,1 +1,1 @@
-import './decorators';
+import './metadata';
