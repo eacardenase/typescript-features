@@ -2,23 +2,31 @@ class Boat {
     @testDecorator
     color: string = 'red';
 
+    @testDecorator
     get formattedColor(): string {
         return `This boats color is ${this.color}`;
     }
 
     @logError('Oops, boat was sunk in the ocean.')
-    pilot(): void {
-        throw new Error();
-
-        console.log('swish');
+    pilot(
+        @parameterDecorator speed: string,
+        @parameterDecorator generateWake: boolean
+    ): void {
+        if (speed === 'fast') {
+            console.log('swish');
+        } else {
+            console.log('nothing at all');
+        }
     }
+}
+
+function parameterDecorator(target: any, key: string, index: number) {
+    console.log(key, index);
 }
 
 // target will always be the prototype of the class
 function testDecorator(target: any, key: string) {
-    console.log(target);
     console.log(key);
-    console.log(target[key]); // undefined if is a property
 }
 
 function logError(errorMessage: string) {
