@@ -5,7 +5,7 @@ class Boat {
         return `This boats color is ${this.color}`;
     }
 
-    @logError
+    @logError('Oops, boat was sunk in the ocean.')
     pilot(): void {
         throw new Error();
 
@@ -13,18 +13,18 @@ class Boat {
     }
 }
 
-function logError(target: any, key: string, desc: PropertyDescriptor): void {
-    console.log('Target:', target);
-    console.log('Key:', key);
+function logError(errorMessage: string) {
+    return function (target: any, key: string, desc: PropertyDescriptor): void {
+        const method = desc.value;
+
+        desc.value = function () {
+            try {
+                method();
+            } catch (error) {
+                console.log(errorMessage);
+            }
+        };
+    };
 }
 
-const myObject = {};
-
-Object.defineProperty(myObject, 'test', {
-    value: 'test',
-    writable: false,
-    enumerable: false,
-    configurable: false,
-});
-
-delete myObject.test;
+new Boat().pilot();
